@@ -1,0 +1,42 @@
+[user]
+	email = wietse.j@gmail.com
+	name = Wietse
+
+[core]
+    editor = vim
+
+[commit]
+    verbose = true
+
+[push]
+	default = simple
+
+[rebase]
+    autosquash = true
+
+[diff]
+    tool = vimdiff
+
+[difftool "vimdiff"]
+    cmd = vim -d $LOCAL $BASE
+
+[mergetool "fugitive"]
+    cmd = vim -f -c \"Gdiff\" \"$MERGED\"
+
+[alias]
+    co = checkout
+    ci = commit
+    br = branch
+    st = status
+    l = log --oneline --decorate --graph --all
+    pf = push origin +HEAD
+    sa = stash save --include-untracked --keep-index
+
+    # get the current branch name (used in other aliases)
+    branch-name = "!git rev-parse --abbrev-ref HEAD"
+    # push current branch to the remote "origin" and set it to track the upstream branch
+    push-new-branch = "!git push -u origin $(git branch-name)"
+    # Delete the remote version of the current branch
+    delete-remote-branch = "!git push origin :$(git branch-name)"
+    # Interactively rebase all the commits on the current branch
+    rebase-branch = "!git rebase -i `git merge-base master HEAD`"
