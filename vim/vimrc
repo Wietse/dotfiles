@@ -1,0 +1,296 @@
+"
+"--- PLUGINS
+"
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugs')
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'altercation/vim-colors-solarized'
+Plug 'scrooloose/nerdtree'
+Plug 'tomtom/tcomment_vim'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tpope/vim-fugitive'
+Plug 'w0rp/ale'  " asynchronous linting
+Plug 'klen/python-mode'
+Plug 'jmcantrell/vim-virtualenv'
+Plug 'godlygeek/tabular'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'Shougo/deoplete.nvim'  " asynchronous completion
+Plug 'roxma/nvim-yarp'  " deoplete dependency
+Plug 'roxma/vim-hug-neovim-rpc'  " deoplete dependency
+call plug#end()
+
+"
+"--- GENERAL
+"
+set nocompatible             " not vi-compatible
+filetype plugin on           " allow plugin feature by filetype
+filetype indent on           " allow indentation feature by filetype
+syntax enable                " enable syntax highlighting
+set nobackup                 " don't make a backup before writing a file
+set noswapfile               " don't use a swapfile for the buffer
+set autowrite                " automatically write modifications to the file on certain commands
+set autowriteall             " same as autowrite but on more commands
+set history=1000             " keep 1000 lines of history
+set encoding=utf-8           " default encoding
+set fileformats=unix,dos,mac " default file formats
+
+" keep an undo file
+if !isdirectory('~/.vim/.undo')
+  call mkdir('~/.vim/.undo', 'p')
+endif
+set undodir=~/.vim/.undo//
+set undofile
+
+"
+"--- USER INTERFACE
+"
+let mapleader=" "              " set the spacebar as <leader> (! use Ctr-V spacebar to insert the space!)
+let g:mapleader=" "
+set mouse=a                    " allow use of the mouse
+set cursorline                 " highlight the line the cursor is on
+set ruler                      " always show linenumber/columnnumber of the cursor
+set number                     " show line numbers
+set signcolumn=yes             " always show the 'sign column' (e.g. to indicate errors)
+set laststatus=2               " always show the statusline
+set showcmd                    " show incomplete commands
+set scrolloff=2                " number of lines to keep above and below the cursor when scrolling vertically
+set sidescrolloff=8            " number of columns to keep right and left of the cursor when scrolling horizontally
+set wildmenu                   " enhanced command line completion
+set wildmode=full              " complete the next full match
+set wildignorecase             " ignore case when comleting file names
+set wildignore=*.o,*~,*.pyc,*.zip,__pycache__    " list of filepatterns to ignore for file completion
+set whichwrap+=h,l,<,>         " allow to move over linebreaks
+set backspace=indent,eol,start " allow backspacing over everything in insert mode
+set fileignorecase             " case insensitive file and directory names
+set incsearch                  " start matching the search pattern imediatly
+set hlsearch                   " highlight the search pattern
+set smartcase                  " case insensitive search except when using an uppercase char
+set lazyredraw                 " don't redraw the screen when executing macros
+set showmatch                  " show matching pairs of brackets
+set matchtime=5                " how long to highlight the pairs of brackets
+set noerrorbells               " don't sound the bell on errors
+set visualbell                 " just flash the screen
+set nojoinspaces               " only insert 1 space after punctuation when joining lines
+set formatoptions+=r           " insert current comment leader when hitting <Enter> in insert mode
+set formatoptions+=j           " remove comment char when doing automatic formatting (e.g. when joining lines)
+set hidden                     " allow hidden buffers (instead of unloading them)
+set splitbelow                 " vertical split below the current screen
+set splitright                 " horizontal splits to the right
+set switchbuf+=useopen         " switch to the first window where the specified buffer is open
+set diffopt+=vertical          " prefer vertical splits for diffs
+set diffopt+=context:100       " show a lot of context around the changed lines
+set completeopt+=menuone       " also show the menu when there is only 1 match
+set completeopt+=longest       " only insert the longest common text of the matches
+set autoindent                 " keep indentation of previous line when pressing <Enter>
+set smartindent                " be smarter about autoindent
+set shiftwidth=4               " shift by 4 spaces when shifting lines with >> or <<
+set tabstop=4                  " number of spaces to use for a <Tab>
+set softtabstop=4              " number of spaces to use for softtab
+set expandtab                  " always expand <Tab> to 4 spaces (don't use <Tab>)
+set textwidth=120              " when appropriate, break lines after a maximum width of `textwidth`
+set listchars=tab:»·,trail:·   " show these chars for <Tab> and for trailing whitespace
+
+" Use a blinking upright bar cursor in Insert mode, a blinking block in normal
+set guicursor=n-v-c:block,o:hor50,i-ci:hor15,r-cr:hor30,sm:block " in gui and win32 console
+if exists('$TMUX')                                               " if in tmux
+    let s:uname = system("uname -s")
+    if s:uname == "Darwin"
+        let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+        let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+    else
+        let &t_SI = "\<Esc>Ptmux;\<Esc>\e[5 q\<Esc>\\"
+        let &t_EI = "\<Esc>Ptmux;\<Esc>\e[1 q\<Esc>\\"
+    endif
+elseif &term == 'xterm-256color' || &term == 'screen-256color'   " in the terminal
+    let &t_SI = "\<Esc>[5 q"
+    let &t_EI = "\<Esc>[1 q"
+endif
+
+"
+"--- SPECIFIC FILE TYPES
+"
+
+" For VIM, HTML, XML, CSS I want only 2 space indents
+au BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set shiftwidth=2
+au BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set tabstop=2
+
+" Makefile does need tabs
+au BufRead,BufNewFile Makefile* set noexpandtab
+
+"
+"--- MISCELANIOUS
+"
+
+" The matchit plugin makes the % command work better, but it is not backwards
+" compatible.
+if has('syntax') && has('eval')
+  packadd matchit
+endif
+
+" Use the Silver Searcher to grep, if available
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor
+endif
+
+"
+"--- PLUGIN CONFIGURATIONS
+"
+
+" solarized + powerline + airline
+set background=dark
+colorscheme solarized
+let g:airline_powerline_fonts=1
+let g:airline_solarized_normal_green=1
+let g:solarized_diffmode="high"
+let g:solarized_contrast="high"
+let g:solarized_visibility="high"
+
+" NERDTree
+let NERDTreeIgnore = ['\.pyc$', '\.swp$']
+let NERDTreeQuitOnOpen = 1
+nnoremap <leader>e :NERDTreeToggle<cr>
+
+" ALE (Asynchronous Lint Engine)
+" https://github.com/w0rp/ale
+let g:ale_sign_column_always = 1
+let g:ale_sign_error = '✗›'
+let g:ale_sign_warning = '‼›'
+let g:ale_sign_info = '∆›'
+let g:ale_sign_style_error = '≈›'
+let g:ale_sign_style_warning = '≈›'
+let g:airline#extensions#ale#enabled = 1
+let g:ale_open_list = 'on_save'
+let g:ale_virtualenv_dir_names = ['venv', '.env', '.py-env', '.py3-env']
+" Annoying ALEExeption when viewing a diff with vim-fugitive
+let g:ale_pattern_options = {'^fugitive:[\\/][\\/]': {'ale_enabled': 0}}
+nmap <silent> ]e <Plug>(ale_previous_wrap)
+nmap <silent> [e <Plug>(ale_previous_wrap)
+
+
+" pymode plugin
+" let g:pymode_python = 'python3'
+let g:pymode_options_max_line_length = 120
+let g:pymode_rope = 0
+let g:pymode_rope_completion = 0
+let g:pymode_rope_complete_on_dot = 0
+let g:pymode_doc = 0
+let g:pymode_lint = 0
+let g:pymode_lint_checkers = ['pyflakes', 'mccabe']
+let g:pymode_lint_ignore = "E731"
+let g:pymode_lint_write = 0  " Auto check on save
+let g:pymode_virtualenv = 0  " Support virtualenv
+let g:pymode_breakpoint = 1  " Enable breakpoints plugin
+let g:pymode_breakpoint_key = '<leader>b'
+let g:pymode_syntax = 1  " syntax highlighting
+let g:pymode_syntax_all = 1
+let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+let g:pymode_syntax_space_errors = g:pymode_syntax_all
+let g:pymode_folding = 0  " Don't autofold code
+
+" Tabular
+vmap <leader>t :Tabularize /
+
+" Deoplete
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
+" Use <tab> to complete words
+inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+
+"
+"-- KEY MAPPINGS
+"
+
+" quite a window
+nnoremap <leader>q :q<cr>
+
+" save current buffer (<C-s> gives problems in a normal linux terminal)
+nnoremap <leader>w :w!<cr>
+
+" yank to system clipboard
+nnoremap <leader>y "*y
+
+" paste from system clipboard
+nmap <leader>p "*p
+
+" make Y behave like C or D
+nmap Y y$
+
+" when searching center the search result in center of screen
+nmap n nzz
+nmap N Nzz
+
+" insert a linebreak
+nmap <leader>lb i<cr><esc>
+
+" treat long lines as break lines
+map j gj
+map k gk
+
+" easier way to move between splits
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+" Blatantly stolen from https://github.com/tpope/vim-unimpaired/blob/master/plugin/unimpaired.vim
+
+if exists("g:loaded_key_mappings") || &cp || v:version < 700
+    finish
+endif
+let g:loaded_key_mappings = 1
+
+" Next and previous
+
+function! s:MapNextFamily(map,cmd)
+    let map = '<Plug>unimpaired'.toupper(a:map)
+    let cmd = '".(v:count ? v:count : "")."'.a:cmd
+    let end = '"<CR>'.(a:cmd == 'l' || a:cmd == 'c' ? 'zv' : '')
+    execute 'nnoremap <silent> '.map.'Previous :<C-U>exe "'.cmd.'previous'.end
+    execute 'nnoremap <silent> '.map.'Next     :<C-U>exe "'.cmd.'next'.end
+    execute 'nnoremap <silent> '.map.'First    :<C-U>exe "'.cmd.'first'.end
+    execute 'nnoremap <silent> '.map.'Last     :<C-U>exe "'.cmd.'last'.end
+    execute 'nmap <silent> ['.        a:map .' '.map.'Previous'
+    execute 'nmap <silent> ]'.        a:map .' '.map.'Next'
+    execute 'nmap <silent> ['.toupper(a:map).' '.map.'First'
+    execute 'nmap <silent> ]'.toupper(a:map).' '.map.'Last'
+    if exists(':'.a:cmd.'nfile')
+        execute 'nnoremap <silent> '.map.'PFile :<C-U>exe "'.cmd.'pfile'.end
+        execute 'nnoremap <silent> '.map.'NFile :<C-U>exe "'.cmd.'nfile'.end
+        execute 'nmap <silent> [<C-'.a:map.'> '.map.'PFile'
+        execute 'nmap <silent> ]<C-'.a:map.'> '.map.'NFile'
+    endif
+endfunction
+
+" call s:MapNextFamily('a','')  " argument list
+call s:MapNextFamily('b','b')  " buffer list
+call s:MapNextFamily('l','l')  " local list
+call s:MapNextFamily('q','c')  " quickfix list
+call s:MapNextFamily('t','t')  " tag stack
+
+
+" => Nifty trick found at https://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
+" select some text -> replace with "p" without overwritting the paste buffer!
+" vp doesn't replace paste buffer
+function! RestoreRegister()
+  let @" = s:restore_reg
+  return ''
+endfunction
+function! s:Repl()
+  let s:restore_reg = @"
+  return "p@=RestoreRegister()\<cr>"
+endfunction
+vmap <silent> <expr> p <sid>Repl()
+
+" Define `Reverse`: reverses the order of the lines selected
+command! -bar -range=% Reverse <line1>,<line2>global/^/m<line1>-1
