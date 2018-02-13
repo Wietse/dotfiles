@@ -41,11 +41,11 @@ set encoding=utf-8           " default encoding
 set fileformats=unix,dos,mac " default file formats
 
 " keep an undo file
-if !isdirectory('~/.vim/.undo')
-  call mkdir('~/.vim/.undo', 'p')
-endif
-set undodir=~/.vim/.undo//
 set undofile
+if !isdirectory($HOME . "/.vim/.undo")
+  call mkdir($HOME . "/.vim/.undo", "p")
+endif
+set undodir=~/.vim/.undo
 
 "
 "--- USER INTERFACE

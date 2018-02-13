@@ -1,2 +1,4 @@
 vim/plugs/*
 !vim/plugs/README.md
+
+vim/.undo
