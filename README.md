@@ -6,8 +6,8 @@ Clone this repository "somewhere" on your machine. Then create symlinks to the r
 cloned repository):
 
 ```shell
-mkdir -p ~/.config
-ln -s git ~/.config/git
+ln -s git/config ~/.gitconfig
 ln -s vim ~/.vim
 ln -s tmux.conf ~/.tmux.conf
+ln -s zsh/zshrc ~/.zshrc
 ```
