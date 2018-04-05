@@ -11,6 +11,7 @@ call plug#begin('~/.vim/plugs')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'altercation/vim-colors-solarized'
+Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'tomtom/tcomment_vim'
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -218,10 +219,10 @@ nnoremap <leader>q :q<cr>
 nnoremap <leader>w :w!<cr>
 
 " yank to system clipboard
-nnoremap <leader>y "*y
+nnoremap <leader>y "+y
 
 " paste from system clipboard
-nmap <leader>p "*p
+nmap <leader>p "+p
 
 " make Y behave like C or D
 nmap Y y$
@@ -231,7 +232,7 @@ nmap n nzz
 nmap N Nzz
 
 " insert a linebreak
-nmap <leader>lb i<cr><esc>
+nmap <leader>l i<cr><esc>
 
 " treat long lines as break lines
 map j gj
