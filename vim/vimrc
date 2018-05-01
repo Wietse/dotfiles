@@ -21,9 +21,12 @@ Plug 'klen/python-mode'
 Plug 'jmcantrell/vim-virtualenv'
 Plug 'godlygeek/tabular'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'Shougo/deoplete.nvim'  " asynchronous completion
-Plug 'roxma/nvim-yarp'  " deoplete dependency
-Plug 'roxma/vim-hug-neovim-rpc'  " deoplete dependency
+" Plug 'Shougo/deoplete.nvim'  " asynchronous completion
+" Plug 'roxma/nvim-yarp'  " deoplete dependency
+" Plug 'roxma/vim-hug-neovim-rpc'  " deoplete dependency
+Plug 'ervandew/supertab'
+Plug 'davidhalter/jedi-vim'
+Plug 'mileszs/ack.vim'
 call plug#end()
 
 "
@@ -197,15 +200,23 @@ let g:pymode_folding = 0  " Don't autofold code
 " Tabular
 vmap <leader>t :Tabularize /
 
-" Deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-" Use <tab> to complete words
-inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
+" " Deoplete
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_smart_case = 1
+" " Use <tab> to complete words
+" inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
+" function! s:check_back_space() abort
+"     let col = col('.') - 1
+"     return !col || getline('.')[col - 1]  =~ '\s'
+" endfunction
+
+" Ack vim
+if executable('ag')
+    let g:ackprg = 'ag --vimgrep --smart-case'
+endif
+cnoreabbrev ag Ack!
+cnoreabbrev Ag Ack!
+nnoremap <leader>a :Ack!<space>
 
 
 "
