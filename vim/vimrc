@@ -162,6 +162,7 @@ nnoremap <leader>e :NERDTreeToggle<cr>
 
 " ALE (Asynchronous Lint Engine)
 " https://github.com/w0rp/ale
+let g:ale_linters = { 'python': ['flake8'], }
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '✗›'
 let g:ale_sign_warning = '‼›'

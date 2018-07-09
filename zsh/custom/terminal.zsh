@@ -5,10 +5,11 @@ alias mv='mv -iv'  # move: prompt to overwrite + verbose
 alias mkdir='mkdir -pv'  # make directory: intermediate dirs + verbose
 mcd() { mkdir "$1" && cd "$1"; }
 
-alias edit-vimrc='vim ~/.vim/vimrc'
-alias edit-zshrc='vim ~/.zshrc'
-alias edit-alias='vim ~/.oh-my-zsh/custom/terminal.zsh'
-alias edit-tmuxrc='vim ~/.tmux.conf'
+alias edit-vimrc='vim $HOME/.vim/vimrc'
+alias edit-zshrc='vim $HOME/.zshrc'
+alias edit-alias='vim $ZSH_CUSTOM/terminal.zsh'
+alias edit-tmuxrc='vim $HOME/.tmux.conf'
+alias edit-gitconfig='vim $HOME/.dotfiles/git/config'
 
 # always getting annoyed with this one...
 alias ghostscript='/usr/bin/gs'
