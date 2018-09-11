@@ -10,4 +10,5 @@ ln -s git/config ~/.gitconfig
 ln -s vim ~/.vim
 ln -s tmux.conf ~/.tmux.conf
 ln -s zsh/zshrc ~/.zshrc
+ln -s python/flake8 ~/.flake8
 ```
