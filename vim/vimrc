@@ -11,6 +11,7 @@ call plug#begin('~/.vim/plugs')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'altercation/vim-colors-solarized'
+Plug 'lifepillar/vim-solarized8'
 Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'tomtom/tcomment_vim'
@@ -27,6 +28,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'ervandew/supertab'
 Plug 'davidhalter/jedi-vim'
 Plug 'mileszs/ack.vim'
+Plug 'amoffat/snake'
 call plug#end()
 
 "
@@ -68,7 +70,7 @@ set sidescrolloff=8            " number of columns to keep right and left of the
 set wildmenu                   " enhanced command line completion
 set wildmode=full              " complete the next full match
 set wildignorecase             " ignore case when comleting file names
-set wildignore=*.o,*~,*.pyc,*.zip,__pycache__    " list of filepatterns to ignore for file completion
+set wildignore=*.o,*~,*.pyc,*.zip,__pycache__,*/.git/*,*/.hg/*,*/.svn/*    " list of filepatterns to ignore for file completion
 set whichwrap+=h,l,<,>         " allow to move over linebreaks
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
 set fileignorecase             " case insensitive file and directory names
@@ -99,6 +101,7 @@ set softtabstop=4              " number of spaces to use for softtab
 set expandtab                  " always expand <Tab> to 4 spaces (don't use <Tab>)
 set textwidth=120              " when appropriate, break lines after a maximum width of `textwidth`
 set listchars=tab:»·,trail:·   " show these chars for <Tab> and for trailing whitespace
+set completeopt=menuone,longest
 
 " Use a blinking upright bar cursor in Insert mode, a blinking block in normal
 set guicursor=n-v-c:block,o:hor50,i-ci:hor15,r-cr:hor30,sm:block " in gui and win32 console
@@ -116,13 +119,25 @@ elseif &term == 'xterm-256color' || &term == 'screen-256color'   " in the termin
     let &t_EI = "\<Esc>[1 q"
 endif
 
+if exists('+termguicolors')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors
+endif
+
+" Close the location list when a buffer is closed
+augroup CloseLoclistWindowGroup
+    autocmd!
+    autocmd QuitPre * if empty(&buftype) | lclose | endif
+augroup END
+
 "
 "--- SPECIFIC FILE TYPES
 "
 
-" For VIM, HTML, XML, CSS I want only 2 space indents
-au BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set shiftwidth=2
-au BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set tabstop=2
+" For YAML, VIM, HTML, XML, CSS I want only 2 space indents
+au BufRead,BufNewFile *.yml,*.vim,*.htm,*.html,*.xml,*.css set shiftwidth=2
+au BufRead,BufNewFile *.yml,*.vim,*.htm,*.html,*.xml,*.css set tabstop=2
 
 " Makefile does need tabs
 au BufRead,BufNewFile Makefile* set noexpandtab
@@ -148,7 +163,8 @@ endif
 
 " solarized + powerline + airline
 set background=dark
-colorscheme solarized
+" colorscheme solarized
+colorscheme solarized8
 let g:airline_powerline_fonts=1
 let g:airline_solarized_normal_green=1
 let g:solarized_diffmode="high"
@@ -162,6 +178,7 @@ nnoremap <leader>e :NERDTreeToggle<cr>
 
 " ALE (Asynchronous Lint Engine)
 " https://github.com/w0rp/ale
+let g:ale_completion_enabled = 0
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '✗›'
 let g:ale_sign_warning = '‼›'
@@ -169,8 +186,13 @@ let g:ale_sign_info = '∆›'
 let g:ale_sign_style_error = '≈›'
 let g:ale_sign_style_warning = '≈›'
 let g:airline#extensions#ale#enabled = 1
-let g:ale_open_list = 'on_save'
-let g:ale_virtualenv_dir_names = ['venv', '.env', '.py-env', '.py3-env']
+let g:ale_open_list = 0  " 'on_save'
+let g:ale_virtualenv_dir_names = ['venv', '.env', '.py-env', '.py3-env', 'metis']
+" see: https://pycodestyle.readthedocs.io/en/latest/intro.html#error-codes
+" and: http://flake8.pycqa.org/en/latest/user/error-codes.html
+let g:ale_python_flake8_options = "--select F,E10,E11,E502,E71,E72,E9,W1,W2,W6"
+" see: https://pylint.readthedocs.io/en/latest/technical_reference/features.html
+let g:ale_python_pylint_options = "--disable missing-docstring,line-too-long,invalid-name,too-many-arguments,too-many-instance-attributes,unnecessary-lambda,bad-whitespace,too-many-public-methods,too-few-public-methods,bad-continuation,too-many-locals"
 " Annoying ALEExeption when viewing a diff with vim-fugitive
 let g:ale_pattern_options = {'^fugitive:[\\/][\\/]': {'ale_enabled': 0}}
 nmap <silent> ]e <Plug>(ale_previous_wrap)
@@ -190,12 +212,15 @@ let g:pymode_lint_ignore = "E731"
 let g:pymode_lint_write = 0  " Auto check on save
 let g:pymode_virtualenv = 0  " Support virtualenv
 let g:pymode_breakpoint = 1  " Enable breakpoints plugin
+let g:pymode_breakpoint_cmd = 'import pudb; pudb.set_trace()  # BREAKPOINT'
 let g:pymode_breakpoint_key = '<leader>b'
 let g:pymode_syntax = 1  " syntax highlighting
 let g:pymode_syntax_all = 1
 let g:pymode_syntax_indent_errors = g:pymode_syntax_all
 let g:pymode_syntax_space_errors = g:pymode_syntax_all
 let g:pymode_folding = 0  " Don't autofold code
+
+" vim-virtualenv
 
 " Tabular
 vmap <leader>t :Tabularize /
@@ -210,6 +235,10 @@ vmap <leader>t :Tabularize /
 "     return !col || getline('.')[col - 1]  =~ '\s'
 " endfunction
 
+" Jedi vim
+let g:jedi#show_call_signatures=2
+let g:jedi#auto_vim_configuration=0
+
 " Ack vim
 if executable('ag')
     let g:ackprg = 'ag --vimgrep --smart-case'
@@ -217,6 +246,12 @@ endif
 cnoreabbrev ag Ack!
 cnoreabbrev Ag Ack!
 nnoremap <leader>a :Ack!<space>
+
+" CTRLP
+if executable('ag')
+    let user_command = 'ag %s -l --nocolor -U --hidden -g ""'
+endif
+let g:ctrlp_switch_buffer = 'E'
 
 
 "
@@ -306,3 +341,8 @@ vmap <silent> <expr> p <sid>Repl()
 
 " Define `Reverse`: reverses the order of the lines selected
 command! -bar -range=% Reverse <line1>,<line2>global/^/m<line1>-1
+
+" Easy python scripting of vim with Snake
+if filereadable(expand("~/.vim/plugs/snake/plugin/snake.vim"))
+    source ~/.vim/plugs/snake/plugin/snake.vim
+endif

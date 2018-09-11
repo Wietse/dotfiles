@@ -1,0 +1,12 @@
+tags
+*~
+.*.swp
+.DS_Store
+.pdbrc
+devnotes.txt
+generate-tags.sh
+.pytest_cache
+*.egg-info*
+__pycache__
+requirements_wja.txt
+wja_*
