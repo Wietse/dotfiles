@@ -10,11 +10,13 @@ endif
 call plug#begin('~/.vim/plugs')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'altercation/vim-colors-solarized'
-Plug 'kien/ctrlp.vim'
+Plug 'morhetz/gruvbox'
+Plug 'cormacrelf/vim-colors-github'
+Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'tomtom/tcomment_vim'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-fugitive'
 Plug 'w0rp/ale'  " asynchronous linting
 Plug 'klen/python-mode'
@@ -38,8 +40,6 @@ filetype indent on           " allow indentation feature by filetype
 syntax enable                " enable syntax highlighting
 set nobackup                 " don't make a backup before writing a file
 set noswapfile               " don't use a swapfile for the buffer
-set autowrite                " automatically write modifications to the file on certain commands
-set autowriteall             " same as autowrite but on more commands
 set history=1000             " keep 1000 lines of history
 set encoding=utf-8           " default encoding
 set fileformats=unix,dos,mac " default file formats
@@ -98,8 +98,15 @@ set tabstop=4                  " number of spaces to use for a <Tab>
 set softtabstop=4              " number of spaces to use for softtab
 set expandtab                  " always expand <Tab> to 4 spaces (don't use <Tab>)
 set textwidth=120              " when appropriate, break lines after a maximum width of `textwidth`
+set list                       " enable list mode to show invisible characters
 set listchars=tab:»·,trail:·   " show these chars for <Tab> and for trailing whitespace
+set updatetime=100             " some plugins hook into the CursorHold event which gets triggered after updatetime ms
 
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
 " Use a blinking upright bar cursor in Insert mode, a blinking block in normal
 set guicursor=n-v-c:block,o:hor50,i-ci:hor15,r-cr:hor30,sm:block " in gui and win32 console
 if exists('$TMUX')                                               " if in tmux
@@ -115,6 +122,17 @@ elseif &term == 'xterm-256color' || &term == 'screen-256color'   " in the termin
     let &t_SI = "\<Esc>[5 q"
     let &t_EI = "\<Esc>[1 q"
 endif
+
+"From https://github.com/aonemd/aaku
+"remove current line highlight in unfocused window
+au VimEnter,WinEnter,BufWinEnter,FocusGained,CmdwinEnter * set cul
+au WinLeave,FocusLost,CmdwinLeave * set nocul
+"netrw
+let g:netrw_banner=1
+let g:netrw_winsize=40
+let g:netrw_liststyle=3
+let g:netrw_localrmdir='rm -r'
+nnoremap <leader>n :Lexplore<CR>
 
 "
 "--- SPECIFIC FILE TYPES
@@ -137,8 +155,12 @@ if has('syntax') && has('eval')
   packadd matchit
 endif
 
-" Use the Silver Searcher to grep, if available
-if executable('ag')
+if executable('rg')
+  " use ripgrep to grep
+  set grepprg=rg\ --vimgrep\ --no-heading
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+elseif executable('ag')
+  " Use the Silver Searcher to grep, if available
   set grepprg=ag\ --nogroup\ --nocolor
 endif
 
@@ -146,14 +168,29 @@ endif
 "--- PLUGIN CONFIGURATIONS
 "
 
-" solarized + powerline + airline
-set background=dark
-colorscheme solarized
+" colorscheme + powerline + airline
 let g:airline_powerline_fonts=1
-let g:airline_solarized_normal_green=1
-let g:solarized_diffmode="high"
-let g:solarized_contrast="high"
-let g:solarized_visibility="high"
+
+" gruvbox
+let g:gruvbox_italic=1
+let g:gruvbox_hls_cursor="blue"
+let g:gruvbox_number_column="bg1"
+let g:gruvbox_contrast_dark="hard"
+let g:gruvbox_vert_split="bg4"
+let g:gruvbox_color_column="bg4"
+" Delete pipe characters on styling vertical split borders
+set fillchars+=vert:\
+colorscheme gruvbox
+set background=dark
+
+" diff colorscheme: vim-colors-github
+" set background=light
+" " use a slightly darker background, like GitHub inline code blocks
+" " let g:github_colors_soft = 1
+" " more blocky diff markers in signcolumn (e.g. GitGutter)
+" " let g:github_colors_block_diffmark = 0
+" let g:airline_theme = "github"
+" colorscheme github
 
 " NERDTree
 let NERDTreeIgnore = ['\.pyc$', '\.swp$']
@@ -162,7 +199,7 @@ nnoremap <leader>e :NERDTreeToggle<cr>
 
 " ALE (Asynchronous Lint Engine)
 " https://github.com/w0rp/ale
-let g:ale_linters = { 'python': ['flake8'], }
+let g:ale_linters = { 'python': ['flake8', 'pylint'], }
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '✗›'
 let g:ale_sign_warning = '‼›'
@@ -170,12 +207,18 @@ let g:ale_sign_info = '∆›'
 let g:ale_sign_style_error = '≈›'
 let g:ale_sign_style_warning = '≈›'
 let g:airline#extensions#ale#enabled = 1
-let g:ale_open_list = 'on_save'
-let g:ale_virtualenv_dir_names = ['venv', '.env', '.py-env', '.py3-env']
+let g:ale_open_list = 0  " 'on_save'
+let g:ale_virtualenv_dir_names = ['venv', '.venv', '.py-env', '.py3-env', '.metis_env']
+let g:ale_python_pylint_options = "--disable missing-docstring,line-too-long,invalid-name,too-many-arguments,too-many-instance-attributes,unnecessary-lambda,bad-whitespace,too-many-public-methods,too-few-public-methods,bad-continuation,too-many-locals"
 " Annoying ALEExeption when viewing a diff with vim-fugitive
 let g:ale_pattern_options = {'^fugitive:[\\/][\\/]': {'ale_enabled': 0}}
-nmap <silent> ]e <Plug>(ale_previous_wrap)
+nmap <silent> ]e <Plug>(ale_next_wrap)
 nmap <silent> [e <Plug>(ale_previous_wrap)
+" For GCC
+" let g:ale_c_gcc_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/$PYENV_VERSION/include/*/'
+" let g:ale_cpp_gcc_options = '-std=c++14 -Wall -I$HOME/.pyenv/versions/$PYENV_VERSION/include/*/'
+let g:ale_c_gcc_options = '-std=c11 `python-config --cflags`'
+let g:ale_cpp_gcc_options = '-std=c++14 `python-config --cflags`'
 
 
 " pymode plugin
@@ -192,11 +235,16 @@ let g:pymode_lint_write = 0  " Auto check on save
 let g:pymode_virtualenv = 0  " Support virtualenv
 let g:pymode_breakpoint = 1  " Enable breakpoints plugin
 let g:pymode_breakpoint_key = '<leader>b'
+let g:pymode_breakpoint_cmd = 'import pudb; pudb.set_trace()  # BREAKPOINT'
 let g:pymode_syntax = 1  " syntax highlighting
 let g:pymode_syntax_all = 1
 let g:pymode_syntax_indent_errors = g:pymode_syntax_all
 let g:pymode_syntax_space_errors = g:pymode_syntax_all
 let g:pymode_folding = 0  " Don't autofold code
+
+" remote debugging with pudb
+" (no 'import' because it gets inserted by jedi
+nmap <leader>rr Ofrom pudb.remote set_trace; set_trace(term_size=(160, 48), port=6899)<esc>^
 
 " Tabular
 vmap <leader>t :Tabularize /
@@ -211,13 +259,31 @@ vmap <leader>t :Tabularize /
 "     return !col || getline('.')[col - 1]  =~ '\s'
 " endfunction
 
+" Jedi vim
+" let g:jedi#force_py_version=3
+let g:jedi#show_call_signatures=2
+let g:jedi#auto_vim_configuration=0
+nnoremap <silent> <buffer> <leader>d :call jedi#goto()
+nnoremap <silent> <buffer> <K> :call jedi#show_documentation()
+nnoremap <silent> <buffer> <leader>n :call jedi#usages()
+
 " Ack vim
-if executable('ag')
+if executable('rg')
+    let g:ackprg = 'rg --vimgrep --no-heading'
+elseif executable('ag')
     let g:ackprg = 'ag --vimgrep --smart-case'
 endif
 cnoreabbrev ag Ack!
 cnoreabbrev Ag Ack!
-nnoremap <leader>a :Ack!<space>
+"start a search query by pressing \
+nnoremap \ :Ack!<space>
+"search for word under cursor by pressing |
+nnoremap \| :Ack! <C-R><C-W><cr>:cw<cr>
+
+" fzf.vim
+" see also entries in .zshrc where the fzf command is configured
+nnoremap <c-p> :Files<cr>
+nnoremap <leader>p :FZF<cr>
 
 
 "

@@ -1,13 +1,15 @@
 [user]
 	email = wietse.j@gmail.com
 	name = Wietse
+	signingkey = 8FDB2BB860D61019462FDCBA93E459761ECC6E25
 
 [core]
     editor = vim
-    excludesfile = ~/.dotfiles/git/gitignore_global 
+    excludesfile = ~/dotfiles/git/gitignore_global 
 
 [commit]
     verbose = true
+	gpgsign = true
 
 [push]
 	default = simple
@@ -41,3 +43,9 @@
     delete-remote-branch = "!git push origin :$(git branch-name)"
     # Interactively rebase all the commits on the current branch
     rebase-branch = "!git rebase -i `git merge-base master HEAD`"
+[gpg]
+	program = gpg2
+[pager]
+	branch = false
+	tag = false
+    stash = false

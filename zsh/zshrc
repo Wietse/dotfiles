@@ -10,9 +10,12 @@ export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
+export LS_OPTIONS='--color=auto'
+export TERM='xterm-256color'
+
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
-export ZSH_CUSTOM=$HOME/.dotfiles/zsh/custom
+export ZSH_CUSTOM=$HOME/dotfiles/zsh/custom
 
 # Don't show "user@hostname" for the default user
 # export DEFAULT_USER='wja'
@@ -21,7 +24,7 @@ export ZSH_CUSTOM=$HOME/.dotfiles/zsh/custom
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="powerlevel9k/powerlevel9k"
-SOLARIZED_THEME="dark"
+#SOLARIZED_THEME="dark"
 
 POWERLEVEL9K_STATUS_VERBOSE=false
 POWERLEVEL9K_SHORTEN_STRATEGY="truncate_middle"
@@ -30,9 +33,12 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context ssh dir virtualenv vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
 
 # Easily switch primary foreground/background colors
-DEFAULT_FOREGROUND=006
-DEFAULT_BACKGROUND=235
-DEFAULT_COLOR=$DEFAULT_FOREGROUND
+# DEFAULT_FOREGROUND=006
+# DEFAULT_BACKGROUND=235
+# DEFAULT_COLOR=$DEFAULT_FOREGROUND
+
+DEFAULT_FOREGROUND=250 DEFAULT_BACKGROUND=235 PROMPT_COLOR=172
+DEFAULT_COLOR="clear"
 
 POWERLEVEL9K_MODE="nerdfont-complete"
 # POWERLEVEL9K_MODE="awesome-fontconfig"
@@ -187,7 +193,7 @@ POWERLEVEL9K_HOST_ICON="\uF109" # 
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git docker virtualenv)
+plugins=(git docker docker-compose virtualenv ripgrep httpie)
 
 # see /build-software/gnome-terminal-colors-solarized
 # eval `dircolors ~/.dir_colors/dircolors`
@@ -197,9 +203,6 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -226,7 +229,30 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
-pyenv shell 3.6.5
+pyenv shell 3.6.8
 
 # Don't share history between different shells
 unsetopt share_history
+
+# FZF
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# --files: List files that would be searched but do not search
+# --no-ignore: Do not respect .gitignore, etc...
+# --hidden: Search hidden files and folders
+# --follow: Follow symlinks
+# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
+
+
+# pip zsh completion start
+function _pip_completion {
+  local words cword
+  read -Ac words
+  read -cn cword
+  reply=( $( COMP_WORDS="$words[*]" \
+             COMP_CWORD=$(( cword-1 )) \
+             PIP_AUTO_COMPLETE=1 $words[1] ) )
+}
+compctl -K _pip_completion pip
+# pip zsh completion end
+

@@ -32,3 +32,10 @@ alias notes='cd ~/Documents/notes && vim .'
 
 # show info on hard disks and partitions
 alias disk-info='inxi -pod'
+
+# show available colours in the terminal
+show-colours () {
+    for i in {0..255}; do
+        printf "\x1b[38;5;${i}mcolour${i}\x1b[0m\n"
+    done
+}
