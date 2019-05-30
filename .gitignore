@@ -2,3 +2,5 @@ vim/plugs/*
 !vim/plugs/README.md
 
 vim/.undo
+vim/.netrwhist
+plug.vim.old
