@@ -14,8 +14,8 @@ Plug 'morhetz/gruvbox'
 Plug 'cormacrelf/vim-colors-github'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'scrooloose/nerdtree'
+" Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-fugitive'
 Plug 'w0rp/ale'  " asynchronous linting
@@ -27,7 +27,8 @@ Plug 'christoomey/vim-tmux-navigator'
 " Plug 'roxma/nvim-yarp'  " deoplete dependency
 " Plug 'roxma/vim-hug-neovim-rpc'  " deoplete dependency
 Plug 'ervandew/supertab'
-Plug 'davidhalter/jedi-vim'
+Plug 'Valloric/YouCompleteMe'
+" Plug 'davidhalter/jedi-vim'
 Plug 'mileszs/ack.vim'
 call plug#end()
 
@@ -89,8 +90,8 @@ set splitright                 " horizontal splits to the right
 set switchbuf+=useopen         " switch to the first window where the specified buffer is open
 set diffopt+=vertical          " prefer vertical splits for diffs
 set diffopt+=context:100       " show a lot of context around the changed lines
-set completeopt+=menuone       " also show the menu when there is only 1 match
-set completeopt+=longest       " only insert the longest common text of the matches
+set completeopt=menuone,longest        " also show the menu when there is only 1 match
+                                       " only insert the longest common text of the matches
 set autoindent                 " keep indentation of previous line when pressing <Enter>
 set smartindent                " be smarter about autoindent
 set shiftwidth=4               " shift by 4 spaces when shifting lines with >> or <<
@@ -98,6 +99,7 @@ set tabstop=4                  " number of spaces to use for a <Tab>
 set softtabstop=4              " number of spaces to use for softtab
 set expandtab                  " always expand <Tab> to 4 spaces (don't use <Tab>)
 set textwidth=120              " when appropriate, break lines after a maximum width of `textwidth`
+set nowrap                     " don't wrap long lines
 set list                       " enable list mode to show invisible characters
 set listchars=tab:»·,trail:·   " show these chars for <Tab> and for trailing whitespace
 set updatetime=100             " some plugins hook into the CursorHold event which gets triggered after updatetime ms
@@ -125,25 +127,40 @@ endif
 
 "From https://github.com/aonemd/aaku
 "remove current line highlight in unfocused window
-au VimEnter,WinEnter,BufWinEnter,FocusGained,CmdwinEnter * set cul
-au WinLeave,FocusLost,CmdwinLeave * set nocul
+augroup window_focus
+    autocmd!
+    autocmd VimEnter,WinEnter,BufWinEnter,FocusGained,CmdwinEnter * set cursorline
+    autocmd WinLeave,FocusLost,CmdwinLeave * set nocursorline
+augroup END
+
 "netrw
 let g:netrw_banner=1
-let g:netrw_winsize=40
-let g:netrw_liststyle=3
+let g:netrw_winsize=30
+let g:netrw_liststyle = 0
+let g:netrw_browse_split = 0
 let g:netrw_localrmdir='rm -r'
-nnoremap <leader>n :Lexplore<CR>
+nnoremap <leader>e :Lexplore<CR>
+augroup filetype_netrw
+    autocmd!
+    autocmd FileType netrw set nolist
+augroup END
 
 "
 "--- SPECIFIC FILE TYPES
 "
 
 " For VIM, HTML, XML, CSS I want only 2 space indents
-au BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set shiftwidth=2
-au BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set tabstop=2
+augroup filetype_2space_indent
+    autocmd!
+    autocmd BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set shiftwidth=2
+    autocmd BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set tabstop=2
+augroup END
 
 " Makefile does need tabs
-au BufRead,BufNewFile Makefile* set noexpandtab
+augroup filetype_make
+    autocmd!
+    autocmd BufRead,BufNewFile Makefile* set noexpandtab
+augroup END
 
 "
 "--- MISCELANIOUS
@@ -192,14 +209,14 @@ set background=dark
 " let g:airline_theme = "github"
 " colorscheme github
 
-" NERDTree
-let NERDTreeIgnore = ['\.pyc$', '\.swp$']
-let NERDTreeQuitOnOpen = 1
-nnoremap <leader>e :NERDTreeToggle<cr>
+" " NERDTree
+" let NERDTreeIgnore = ['\.pyc$', '\.swp$']
+" let NERDTreeQuitOnOpen = 1
+" nnoremap <leader>e :NERDTreeToggle<cr>
 
 " ALE (Asynchronous Lint Engine)
 " https://github.com/w0rp/ale
-let g:ale_linters = { 'python': ['flake8', 'pylint'], }
+let g:ale_linters = { 'python': ['flake8', 'pylint'], 'c': ['gcc'], 'cpp': ['gcc']}
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '✗›'
 let g:ale_sign_warning = '‼›'
@@ -215,11 +232,14 @@ let g:ale_pattern_options = {'^fugitive:[\\/][\\/]': {'ale_enabled': 0}}
 nmap <silent> ]e <Plug>(ale_next_wrap)
 nmap <silent> [e <Plug>(ale_previous_wrap)
 " For GCC
-" let g:ale_c_gcc_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/$PYENV_VERSION/include/*/'
-" let g:ale_cpp_gcc_options = '-std=c++14 -Wall -I$HOME/.pyenv/versions/$PYENV_VERSION/include/*/'
-let g:ale_c_gcc_options = '-std=c11 `python-config --cflags`'
-let g:ale_cpp_gcc_options = '-std=c++14 `python-config --cflags`'
-
+let g:ale_c_gcc_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.6.8/include/python3.6m'
+let g:ale_cpp_gcc_options = '-std=c++14 -Wall -I$HOME/.pyenv/versions/3.6.8/include/python3.6m'
+let g:ale_c_clang_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.6.8/include/python3.6m'
+" let g:ale_c_gcc_options = '-std=c11 `python-config --cflags`'
+" let g:ale_cpp_gcc_options = '-std=c++14 `python-config --cflags`'
+" let g:ale_c_clang_options = '-std=c11 `python-config --cflags`'
+let g:ale_c_clangd_executable = 'clangd'
+let g:ale_c_clangd_options = ''
 
 " pymode plugin
 " let g:pymode_python = 'python3'
@@ -243,8 +263,7 @@ let g:pymode_syntax_space_errors = g:pymode_syntax_all
 let g:pymode_folding = 0  " Don't autofold code
 
 " remote debugging with pudb
-" (no 'import' because it gets inserted by jedi
-nmap <leader>rr Ofrom pudb.remote set_trace; set_trace(term_size=(160, 48), port=6899)<esc>^
+nmap <leader>rr Ofrom pudb.remote import set_trace; set_trace(term_size=(160, 48), host='0.0.0.0', port=6899)  # BREAKPOINT<esc>^
 
 " Tabular
 vmap <leader>t :Tabularize /
@@ -259,13 +278,28 @@ vmap <leader>t :Tabularize /
 "     return !col || getline('.')[col - 1]  =~ '\s'
 " endfunction
 
-" Jedi vim
-" let g:jedi#force_py_version=3
-let g:jedi#show_call_signatures=2
-let g:jedi#auto_vim_configuration=0
-nnoremap <silent> <buffer> <leader>d :call jedi#goto()
-nnoremap <silent> <buffer> <K> :call jedi#show_documentation()
-nnoremap <silent> <buffer> <leader>n :call jedi#usages()
+" " Jedi vim
+" " let g:jedi#force_py_version=3
+" let g:jedi#show_call_signatures=2
+" let g:jedi#auto_vim_configuration=0
+" nnoremap <silent> <buffer> <leader>d :call jedi#goto()
+" nnoremap <silent> <buffer> <K> :call jedi#show_documentation()
+" nnoremap <silent> <buffer> <leader>n :call jedi#usages()
+
+" YouCompletMe
+let g:ycm_filetype_blacklist = {
+      \ 'markdown': 1,
+      \ 'netrw': 1,
+      \ 'text': 1,
+      \}
+" YCM's identifier completer will seed its identifier database with the keywords of the programming language you're writing
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_use_clangd = 0
+let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+nnoremap <leader>d :YcmCompleter GoTo<cr>
+nnoremap <leader>n :YcmCompleter GoToReferences<cr>
+nnoremap <leader>h :YcmCompleter GetDoc<cr>
 
 " Ack vim
 if executable('rg')
