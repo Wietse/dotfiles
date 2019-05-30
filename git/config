@@ -29,9 +29,11 @@
 [alias]
     co = checkout
     ci = commit
-    br = branch
+    br = branch --color
     st = status
     l = log --oneline --decorate --graph --all
+    lh = log --oneline --decorate --no-merges --graph --all
+    lb = log --cherry --boundary --color --oneline --decorate --graph dev..HEAD
     pf = push origin +HEAD
     sa = stash save --include-untracked --keep-index
 
@@ -41,8 +43,8 @@
     push-new-branch = "!git push -u origin $(git branch-name)"
     # Delete the remote version of the current branch
     delete-remote-branch = "!git push origin :$(git branch-name)"
-    # Interactively rebase all the commits on the current branch
-    rebase-branch = "!git rebase -i `git merge-base master HEAD`"
+    ## Interactively rebase all the commits on the current branch
+    # rebase-branch = "!git rebase -i `git merge-base master HEAD`"
 [gpg]
 	program = gpg2
 [pager]
