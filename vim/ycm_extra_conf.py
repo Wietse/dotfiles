@@ -31,7 +31,8 @@ CPP_BASE_FLAGS = [
     '-std=c++1z',
     '-xc++',
     '-I/usr/lib/',
-    '-I/usr/include/'
+    '-I/usr/include/',
+    '-I/home/wja/.pyenv/versions/3.6.8/include/python3.6m',
 ]
 
 C_SOURCE_EXTENSIONS = [

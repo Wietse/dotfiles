@@ -154,12 +154,19 @@ augroup filetype_2space_indent
     autocmd!
     autocmd BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set shiftwidth=2
     autocmd BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set tabstop=2
+    autocmd FileType groovy set sw=2
+    autocmd FileType groovy set ts=2
 augroup END
 
 " Makefile does need tabs
 augroup filetype_make
     autocmd!
     autocmd BufRead,BufNewFile Makefile* set noexpandtab
+augroup END
+
+augroup filetype_jenkinsfile
+    autocmd!
+    autocmd BufRead,BufNewFile Jenkinsfile set ft=groovy
 augroup END
 
 "
@@ -216,7 +223,7 @@ set background=dark
 
 " ALE (Asynchronous Lint Engine)
 " https://github.com/w0rp/ale
-let g:ale_linters = { 'python': ['flake8', 'pylint'], 'c': ['gcc'], 'cpp': ['gcc']}
+let g:ale_linters = { 'python': ['flake8', 'pylint'], 'c': ['gcc', 'cppcheck'], 'cpp': ['gcc', 'cppcheck']}
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '✗›'
 let g:ale_sign_warning = '‼›'

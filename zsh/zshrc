@@ -228,8 +228,8 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Using pyenv:
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
+    pyenv shell 3.7.3
 fi
-pyenv shell 3.6.8
 
 # Don't share history between different shells
 unsetopt share_history
