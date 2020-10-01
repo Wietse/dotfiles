@@ -1,7 +1,7 @@
 [user]
     email = wietse.j@gmail.com
     name = Wietse
-    signingkey = 8FDB2BB860D61019462FDCBA93E459761ECC6E25
+    signingkey = 93E459761ECC6E25
 
 [core]
     editor = vim

@@ -11,4 +11,5 @@ ln -s vim ~/.vim
 ln -s tmux.conf ~/.tmux.conf
 ln -s zsh/zshrc ~/.zshrc
 ln -s python/flake8 ~/.flake8
+ln -s neovim/init.vim ~/.config/nvim/init.vim
 ```
