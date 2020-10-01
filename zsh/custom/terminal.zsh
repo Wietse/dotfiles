@@ -9,7 +9,7 @@ alias edit-vimrc='vim $HOME/.vim/vimrc'
 alias edit-zshrc='vim $HOME/.zshrc'
 alias edit-alias='vim $ZSH_CUSTOM/terminal.zsh'
 alias edit-tmuxrc='vim $HOME/.tmux.conf'
-alias edit-gitconfig='vim $HOME/.dotfiles/git/config'
+alias edit-gitconfig='vim $HOME/dotfiles/git/config'
 
 # always getting annoyed with this one...
 alias ghostscript='/usr/bin/gs'
@@ -28,7 +28,7 @@ docker run -it \
 alias clear-dns-cache='sudo /etc/init.d/dns-clean start'
 
 # open vim in the notes directory
-alias notes='cd ~/Documents/notes && vim .'
+alias notes='vim ~/Documents/notes'
 
 # show info on hard disks and partitions
 alias disk-info='inxi -pod'
@@ -38,4 +38,23 @@ show-colours () {
     for i in {0..255}; do
         printf "\x1b[38;5;${i}mcolour${i}\x1b[0m\n"
     done
+}
+
+# clean up *.pyc files
+pyclear () {
+    find . -name '*.pyc' -delete
+}
+
+alias set-gcc-version='sudo update-alternatives --config gcc'
+
+# start the metis environment
+workon-metis () {
+    cd ~/ontoforce/metis
+    source ./wja_load_env.sh
+}
+
+# start the metis environment
+workon-iris () {
+    cd ~/ontoforce/iris
+    source ./wja_load_env.sh
 }

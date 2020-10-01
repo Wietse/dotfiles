@@ -1,7 +1,7 @@
 [user]
-	email = wietse.j@gmail.com
-	name = Wietse
-	signingkey = 8FDB2BB860D61019462FDCBA93E459761ECC6E25
+    email = wietse.j@gmail.com
+    name = Wietse
+    signingkey = 8FDB2BB860D61019462FDCBA93E459761ECC6E25
 
 [core]
     editor = vim
@@ -9,16 +9,20 @@
 
 [commit]
     verbose = true
-	gpgsign = true
+    gpgsign = true
+
+[fetch]
+	prune = true
 
 [push]
-	default = simple
+    default = simple
 
 [rebase]
     autosquash = true
 
 [diff]
     tool = vimdiff
+    submodule = log
 
 [difftool "vimdiff"]
     cmd = vim -d $LOCAL $BASE
@@ -33,7 +37,7 @@
     st = status
     l = log --oneline --decorate --graph --all
     lh = log --oneline --decorate --no-merges --graph --all
-    lb = log --cherry --boundary --color --oneline --decorate --graph dev..HEAD
+    lb = log --cherry --boundary --color --oneline --decorate --graph
     pf = push origin +HEAD
     sa = stash save --include-untracked --keep-index
 
@@ -46,8 +50,10 @@
     ## Interactively rebase all the commits on the current branch
     # rebase-branch = "!git rebase -i `git merge-base master HEAD`"
 [gpg]
-	program = gpg2
+    program = gpg2
 [pager]
-	branch = false
-	tag = false
+    branch = false
+    tag = false
     stash = false
+[merge]
+	conflictStyle = diff3

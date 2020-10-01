@@ -12,12 +12,15 @@ C_BASE_FLAGS = [
     '-Wextra',
     '-Werror',
     '-Wsign-compare',
+    '-Wno-missing-field-initializers',
+    '-Wno-write-strings',
     '-DNDEBUG',
-    '-std=c99',
+    '-std=c11',
     '-fwrapv',
+    '-I.',
     '-I/usr/lib/',
     '-I/usr/include/',
-    '-I/home/wja/.pyenv/versions/3.6.8/include/python3.6m',
+    '-I/home/wja/.pyenv/versions/3.7.4/include/python3.7m',
 ]
 
 CPP_BASE_FLAGS = [
@@ -25,14 +28,17 @@ CPP_BASE_FLAGS = [
     '-Wextra',
     '-Wno-long-long',
     '-Wno-variadic-macros',
+    '-Wno-missing-field-initializers',
+    '-Wno-write-strings',
     '-fexceptions',
     '-ferror-limit=10000',
     '-DNDEBUG',
-    '-std=c++1z',
+    '-std=c++14',
     '-xc++',
+    '-I.',
     '-I/usr/lib/',
     '-I/usr/include/',
-    '-I/home/wja/.pyenv/versions/3.6.8/include/python3.6m',
+    '-I/home/wja/.pyenv/versions/3.7.4/include/python3.7m',
 ]
 
 C_SOURCE_EXTENSIONS = [
@@ -52,11 +58,14 @@ SOURCE_DIRECTORIES = [
     'lib'
 ]
 
-HEADER_EXTENSIONS = [
+C_HEADER_EXTENSIONS = [
     '.h',
+    '.hh',
+]
+
+CPP_HEADER_EXTENSIONS = [
     '.hxx',
     '.hpp',
-    '.hh'
 ]
 
 HEADER_DIRECTORIES = [
@@ -68,12 +77,14 @@ BUILD_DIRECTORY = 'build'
 
 def IsSourceFile(filename):
     extension = p.splitext(filename)[1]
-    return extension in C_SOURCE_EXTENSIONS + CPP_SOURCE_EXTENSIONS
+    if extension in C_SOURCE_EXTENSIONS + CPP_SOURCE_EXTENSIONS:
+        return True
+    return IsHeaderFile(filename)
 
 
 def IsHeaderFile(filename):
     extension = p.splitext(filename)[1]
-    return extension in HEADER_EXTENSIONS
+    return extension in C_HEADER_EXTENSIONS + CPP_HEADER_EXTENSIONS
 
 
 def GetCompilationInfoForFile(database, filename):
@@ -190,26 +201,35 @@ def FlagsForCompilationDatabase(root, filename):
         return None
 
 
-def FlagsForFile(filename):
-    root = p.realpath(filename);
-    compilation_db_flags = FlagsForCompilationDatabase(root, filename)
-    if compilation_db_flags:
-        final_flags = compilation_db_flags
-    else:
-        if IsSourceFile(filename):
-            extension = p.splitext(filename)[1]
-            if extension in C_SOURCE_EXTENSIONS:
-                final_flags = C_BASE_FLAGS
-            else:
-                final_flags = CPP_BASE_FLAGS
+def Settings(**kwargs):
+    if kwargs['language'] == 'cfamily':
+        filename = kwargs['filename']
+        root = p.realpath(filename);
+        if root.startswith('/home/wja/ontoforce/metis'):
+            root = '/home/wja/ontoforce/metis'
+        compilation_db_flags = FlagsForCompilationDatabase(root, filename)
+        if compilation_db_flags:
+            final_flags = compilation_db_flags
+        if root.startswith('/home/wja/ontoforce/metis/ext/huri'):
+            final_flags = C_BASE_FLAGS
+        elif root.startswith('/home/wja/ontoforce/metis/ext/tools'):
+            final_flags = CPP_BASE_FLAGS + ['-I/home/wja/ontoforce/metis/ext/huri']
+        else:
+            if IsSourceFile(filename):
+                extension = p.splitext(filename)[1]
+                if extension in C_SOURCE_EXTENSIONS + C_HEADER_EXTENSIONS:
+                    final_flags = C_BASE_FLAGS
+                else:
+                    final_flags = CPP_BASE_FLAGS
 
-        clang_flags = FlagsForClangComplete(root)
-        if clang_flags:
-            final_flags = final_flags + clang_flags
-        include_flags = FlagsForInclude(root)
-        if include_flags:
-            final_flags = final_flags + include_flags
-    return {
-        'flags': final_flags,
-        'do_cache': True
-    }
+            clang_flags = FlagsForClangComplete(root)
+            if clang_flags:
+                final_flags = final_flags + clang_flags
+            include_flags = FlagsForInclude(root)
+            if include_flags:
+                final_flags = final_flags + include_flags
+        return {
+            'flags': final_flags,
+            'do_cache': True
+        }
+    return {}

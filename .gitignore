@@ -4,3 +4,5 @@ vim/plugs/*
 vim/.undo
 vim/.netrwhist
 plug.vim.old
+
+zsh/custom/themes/powerlevel10k

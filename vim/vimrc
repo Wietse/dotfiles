@@ -30,6 +30,7 @@ Plug 'ervandew/supertab'
 Plug 'Valloric/YouCompleteMe'
 " Plug 'davidhalter/jedi-vim'
 Plug 'mileszs/ack.vim'
+Plug 'rust-lang/rust.vim'
 call plug#end()
 
 "
@@ -136,7 +137,7 @@ augroup END
 "netrw
 let g:netrw_banner=1
 let g:netrw_winsize=30
-let g:netrw_liststyle = 0
+let g:netrw_liststyle = 3
 let g:netrw_browse_split = 0
 let g:netrw_localrmdir='rm -r'
 nnoremap <leader>e :Lexplore<CR>
@@ -154,8 +155,8 @@ augroup filetype_2space_indent
     autocmd!
     autocmd BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set shiftwidth=2
     autocmd BufRead,BufNewFile *.vim,*.htm,*.html,*.xml,*.css set tabstop=2
-    autocmd FileType groovy set sw=2
-    autocmd FileType groovy set ts=2
+    autocmd FileType sh,groovy set sw=2
+    autocmd FileType sh,groovy set ts=2
 augroup END
 
 " Makefile does need tabs
@@ -202,19 +203,29 @@ let g:gruvbox_number_column="bg1"
 let g:gruvbox_contrast_dark="hard"
 let g:gruvbox_vert_split="bg4"
 let g:gruvbox_color_column="bg4"
+let g:gruvbox_guisp_fallback = "fg"
 " Delete pipe characters on styling vertical split borders
 set fillchars+=vert:\
 colorscheme gruvbox
 set background=dark
 
+" Try to fix gruvbox color scheme for diffs
+highlight! DiffDelete guifg=lightred ctermfg=lightred guibg=#32302f ctermbg=243 gui=inverse cterm=inverse
+highlight! DiffAdd guifg=lightgreen ctermfg=lightgreen guibg=#32302f ctermbg=167 gui=inverse cterm=inverse
+highlight! DiffChange guifg=gray ctermfg=gray guibg=#1d2021 ctermbg=229 gui=inverse cterm=inverse
+highlight! DiffText guifg=lightblue ctermfg=136 guibg=#1d2021 ctermbg=229 gui=bold,inverse cterm=bold,inverse
+
 " diff colorscheme: vim-colors-github
 " set background=light
-" " use a slightly darker background, like GitHub inline code blocks
-" " let g:github_colors_soft = 1
-" " more blocky diff markers in signcolumn (e.g. GitGutter)
-" " let g:github_colors_block_diffmark = 0
+" use a slightly darker background, like GitHub inline code blocks
+let g:github_colors_soft = 1
+" more blocky diff markers in signcolumn (e.g. GitGutter)
+let g:github_colors_block_diffmark = 0
 " let g:airline_theme = "github"
 " colorscheme github
+" if &diff
+"   colorscheme github
+" endif
 
 " " NERDTree
 " let NERDTreeIgnore = ['\.pyc$', '\.swp$']
@@ -223,6 +234,7 @@ set background=dark
 
 " ALE (Asynchronous Lint Engine)
 " https://github.com/w0rp/ale
+" let g:ale_linters = { 'python': ['flake8', 'pylint', 'mypy'], 'c': ['gcc', 'cppcheck'], 'cpp': ['gcc', 'cppcheck']}
 let g:ale_linters = { 'python': ['flake8', 'pylint'], 'c': ['gcc', 'cppcheck'], 'cpp': ['gcc', 'cppcheck']}
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '✗›'
@@ -239,14 +251,16 @@ let g:ale_pattern_options = {'^fugitive:[\\/][\\/]': {'ale_enabled': 0}}
 nmap <silent> ]e <Plug>(ale_next_wrap)
 nmap <silent> [e <Plug>(ale_previous_wrap)
 " For GCC
-let g:ale_c_gcc_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.6.8/include/python3.6m'
-let g:ale_cpp_gcc_options = '-std=c++14 -Wall -I$HOME/.pyenv/versions/3.6.8/include/python3.6m'
-let g:ale_c_clang_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.6.8/include/python3.6m'
+let g:ale_c_parse_compile_commands = 1
+let g:ale_c_gcc_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
+let g:ale_cpp_gcc_options = '-std=c++14 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
+let g:ale_c_clang_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
 " let g:ale_c_gcc_options = '-std=c11 `python-config --cflags`'
 " let g:ale_cpp_gcc_options = '-std=c++14 `python-config --cflags`'
 " let g:ale_c_clang_options = '-std=c11 `python-config --cflags`'
 let g:ale_c_clangd_executable = 'clangd'
 let g:ale_c_clangd_options = ''
+let g:ale_set_highlights = 0
 
 " pymode plugin
 " let g:pymode_python = 'python3'
@@ -304,6 +318,8 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_add_preview_to_completeopt = 0
 let g:ycm_use_clangd = 0
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+let g:ycm_enable_diagnostic_highlighting=0
+let g:ycm_auto_hover = ''
 nnoremap <leader>d :YcmCompleter GoTo<cr>
 nnoremap <leader>n :YcmCompleter GoToReferences<cr>
 nnoremap <leader>h :YcmCompleter GetDoc<cr>
@@ -414,3 +430,7 @@ vmap <silent> <expr> p <sid>Repl()
 
 " Define `Reverse`: reverses the order of the lines selected
 command! -bar -range=% Reverse <line1>,<line2>global/^/m<line1>-1
+
+" From https://vim.fandom.com/wiki/Pretty-formatting_XML
+command! FormatXML :%!python3 -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"
+command! FormatJson :%!python3 -m json.tool

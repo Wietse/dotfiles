@@ -1,2 +1,7 @@
 wja_*
 .venv-dbg
+.venv
+.mypy_cache
+compile_commands.json
+__pycache__
+*.pyc
