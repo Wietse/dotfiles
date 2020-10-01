@@ -1,10 +1,10 @@
 [user]
     email = wietse.j@gmail.com
     name = Wietse
-    signingkey = 8FDB2BB860D61019462FDCBA93E459761ECC6E25
+    signingkey = BB273865A110319F
 
 [core]
-    editor = vim
+    editor = nvim
     excludesfile = ~/dotfiles/git/gitignore_global 
 
 [commit]
@@ -12,7 +12,7 @@
     gpgsign = true
 
 [fetch]
-	prune = true
+    prune = true
 
 [push]
     default = simple
@@ -21,14 +21,14 @@
     autosquash = true
 
 [diff]
-    tool = vimdiff
+    tool = vimdiff3
     submodule = log
 
 [difftool "vimdiff"]
     cmd = vim -d $LOCAL $BASE
 
 [mergetool "fugitive"]
-    cmd = vim -f -c \"Gdiff\" \"$MERGED\"
+    cmd = nvim -f -c \"Gvdiffsplit!\" \"$MERGED\"
 
 [alias]
     co = checkout
@@ -56,4 +56,4 @@
     tag = false
     stash = false
 [merge]
-	conflictStyle = diff3
+    tool = fugitive

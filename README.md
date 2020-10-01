@@ -6,9 +6,9 @@ Clone this repository "somewhere" on your machine. Then create symlinks to the r
 cloned repository):
 
 ```shell
-ln -s git/config ~/.gitconfig
-ln -s vim ~/.vim
-ln -s tmux.conf ~/.tmux.conf
-ln -s zsh/zshrc ~/.zshrc
-ln -s python/flake8 ~/.flake8
+ln -s ~/dotfiles/git/config ~/.gitconfig
+ln -s ~/dotfiles/vim ~/.vim
+ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
+ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
+ln -s ~/dotfiles/python/flake8 ~/.flake8
 ```
