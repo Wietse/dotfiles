@@ -47,14 +47,4 @@ pyclear () {
 
 alias set-gcc-version='sudo update-alternatives --config gcc'
 
-# start the metis environment
-workon-metis () {
-    cd ~/ontoforce/metis
-    source ./wja_load_env.sh
-}
-
-# start the metis environment
-workon-iris () {
-    cd ~/ontoforce/iris
-    source ./wja_load_env.sh
-}
+alias nvpn='nordvpnteams'
