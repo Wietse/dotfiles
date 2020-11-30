@@ -44,35 +44,35 @@ let g:github_colors_block_diffmark = 0
 " let NERDTreeQuitOnOpen = 1
 " nnoremap <leader>e :NERDTreeToggle<cr>
 
-" ALE (Asynchronous Lint Engine)
-" https://github.com/w0rp/ale
-" let g:ale_linters = { 'python': ['flake8', 'pylint', 'mypy'], 'c': ['gcc', 'cppcheck'], 'cpp': ['gcc', 'cppcheck']}
-let g:ale_linters = { 'python': ['flake8', 'pylint'], 'c': ['gcc', 'cppcheck'], 'cpp': ['gcc', 'cppcheck'], 'rust': ['analyzer']}
-let g:ale_sign_column_always = 1
-let g:ale_sign_error = '✗›'
-let g:ale_sign_warning = '‼›'
-let g:ale_sign_info = '∆›'
-let g:ale_sign_style_error = '≈›'
-let g:ale_sign_style_warning = '≈›'
-let g:airline#extensions#ale#enabled = 1
-let g:ale_open_list = 0  " 'on_save'
-let g:ale_virtualenv_dir_names = ['venv', '.venv', '.py-env', '.py3-env', '.metis_env']
-let g:ale_python_pylint_options = "--disable missing-docstring,line-too-long,invalid-name,too-many-arguments,too-many-instance-attributes,unnecessary-lambda,bad-whitespace,too-many-public-methods,too-few-public-methods,bad-continuation,too-many-locals"
-" Annoying ALEExeption when viewing a diff with vim-fugitive
-let g:ale_pattern_options = {'^fugitive:[\\/][\\/]': {'ale_enabled': 0}}
-nmap <silent> ]e <Plug>(ale_next_wrap)
-nmap <silent> [e <Plug>(ale_previous_wrap)
-" For GCC
-let g:ale_c_parse_compile_commands = 1
-let g:ale_c_gcc_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
-let g:ale_cpp_gcc_options = '-std=c++14 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
-let g:ale_c_clang_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
-" let g:ale_c_gcc_options = '-std=c11 `python-config --cflags`'
-" let g:ale_cpp_gcc_options = '-std=c++14 `python-config --cflags`'
-" let g:ale_c_clang_options = '-std=c11 `python-config --cflags`'
-let g:ale_c_clangd_executable = 'clangd'
-let g:ale_c_clangd_options = ''
-let g:ale_set_highlights = 0
+" " ALE (Asynchronous Lint Engine)
+" " https://github.com/w0rp/ale
+" " let g:ale_linters = { 'python': ['flake8', 'pylint', 'mypy'], 'c': ['gcc', 'cppcheck'], 'cpp': ['gcc', 'cppcheck']}
+" let g:ale_linters = { 'python': ['flake8', 'pylint'], 'c': ['gcc', 'cppcheck'], 'cpp': ['gcc', 'cppcheck'], 'rust': ['analyzer']}
+" let g:ale_sign_column_always = 1
+" let g:ale_sign_error = '✗›'
+" let g:ale_sign_warning = '‼›'
+" let g:ale_sign_info = '∆›'
+" let g:ale_sign_style_error = '≈›'
+" let g:ale_sign_style_warning = '≈›'
+" let g:airline#extensions#ale#enabled = 1
+" let g:ale_open_list = 0  " 'on_save'
+" let g:ale_virtualenv_dir_names = ['venv', '.venv', '.py-env', '.py3-env', '.metis_env']
+" let g:ale_python_pylint_options = "--disable missing-docstring,line-too-long,invalid-name,too-many-arguments,too-many-instance-attributes,unnecessary-lambda,bad-whitespace,too-many-public-methods,too-few-public-methods,bad-continuation,too-many-locals"
+" " Annoying ALEExeption when viewing a diff with vim-fugitive
+" let g:ale_pattern_options = {'^fugitive:[\\/][\\/]': {'ale_enabled': 0}}
+" nmap <silent> ]e <Plug>(ale_next_wrap)
+" nmap <silent> [e <Plug>(ale_previous_wrap)
+" " For GCC
+" let g:ale_c_parse_compile_commands = 1
+" let g:ale_c_gcc_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
+" let g:ale_cpp_gcc_options = '-std=c++14 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
+" let g:ale_c_clang_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
+" " let g:ale_c_gcc_options = '-std=c11 `python-config --cflags`'
+" " let g:ale_cpp_gcc_options = '-std=c++14 `python-config --cflags`'
+" " let g:ale_c_clang_options = '-std=c11 `python-config --cflags`'
+" let g:ale_c_clangd_executable = 'clangd'
+" let g:ale_c_clangd_options = ''
+" let g:ale_set_highlights = 0
 
 " pymode plugin
 " let g:pymode_python = 'python3'
@@ -119,49 +119,97 @@ vmap <leader>t :Tabularize /
 " nnoremap <silent> <buffer> <K> :call jedi#show_documentation()
 " nnoremap <silent> <buffer> <leader>n :call jedi#usages()
 
-" YouCompletMe
-let g:ycm_filetype_blacklist = {
-      \ 'markdown': 1,
-      \ 'netrw': 1,
-      \ 'text': 1,
-      \}
-let g:ycm_language_server =
-\ [
-\   {
-\     'name': 'rust',
-\     'cmdline': ['rust-analyzer'],
-\     'filetypes': ['rust'],
-\     'project_root_files': ['Cargo.toml']
-\   }
-\ ]
-" YCM's identifier completer will seed its identifier database with the keywords of the programming language you're writing
-let g:ycm_seed_identifiers_with_syntax = 1
-let g:ycm_add_preview_to_completeopt = 0
-let g:ycm_use_clangd = 0
-let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
-let g:ycm_enable_diagnostic_highlighting=0
-let g:ycm_auto_hover = ''
-nnoremap <leader>d :YcmCompleter GoTo<cr>
-nnoremap <leader>n :YcmCompleter GoToReferences<cr>
-nnoremap <leader>h :YcmCompleter GetDoc<cr>
+" " YouCompletMe
+" let g:ycm_filetype_blacklist = {
+"       \ 'markdown': 1,
+"       \ 'netrw': 1,
+"       \ 'text': 1,
+"       \}
+" let g:ycm_language_server =
+" \ [
+" \   {
+" \     'name': 'rust',
+" \     'cmdline': ['rust-analyzer'],
+" \     'filetypes': ['rust'],
+" \     'project_root_files': ['Cargo.toml']
+" \   }
+" \ ]
+" " YCM's identifier completer will seed its identifier database with the keywords of the programming language you're writing
+" let g:ycm_seed_identifiers_with_syntax = 1
+" let g:ycm_add_preview_to_completeopt = 0
+" let g:ycm_use_clangd = 0
+" let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+" let g:ycm_enable_diagnostic_highlighting=0
+" let g:ycm_auto_hover = ''
+" nnoremap <leader>d :YcmCompleter GoTo<cr>
+" nnoremap <leader>n :YcmCompleter GoToReferences<cr>
+" nnoremap <leader>h :YcmCompleter GetDoc<cr>
 
-" Ack vim
-if executable('rg')
-    let g:ackprg = 'rg --vimgrep --no-heading'
-elseif executable('ag')
-    let g:ackprg = 'ag --vimgrep --smart-case'
+" coc.nvim
+nmap <silent> <leader>d <Plug>(coc-definition)
+nmap <silent> <leader>y <Plug>(coc-type-definition)
+nmap <silent> <leader>m <Plug>(coc-implementation)
+nmap <silent> <leader>n <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Move beteen "errors"
+nmap <silent> ]e <Plug>(coc-diagnostic-prev)
+nmap <silent> [e <Plug>(coc-diagnostic-next)
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
 endif
-cnoreabbrev ag Ack!
-cnoreabbrev Ag Ack!
-"start a search query by pressing \
-nnoremap \ :Ack!<space>
-"search for word under cursor by pressing |
-nnoremap \| :Ack! <C-R><C-W><cr>:cw<cr>
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" " Map function and class text objects
+" " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+" xmap if <Plug>(coc-funcobj-i)
+" omap if <Plug>(coc-funcobj-i)
+" xmap af <Plug>(coc-funcobj-a)
+" omap af <Plug>(coc-funcobj-a)
+" xmap ic <Plug>(coc-classobj-i)
+" omap ic <Plug>(coc-classobj-i)
+" xmap ac <Plug>(coc-classobj-a)
+" omap ac <Plug>(coc-classobj-a)
+
 
 " fzf.vim
 " see also entries in .zshrc where the fzf command is configured
 nnoremap <c-p> :Files<cr>
-nnoremap <leader>p :FZF<cr>
+" Using "Rg" feature of FZF
+"start a search query by pressing \
+nnoremap \ :Rg<cr>
 
 
 "
@@ -174,11 +222,17 @@ nnoremap <leader>q :q<cr>
 " save current buffer (<C-s> gives problems in a normal linux terminal)
 nnoremap <leader>w :w!<cr>
 
-" yank to system clipboard
-nnoremap <leader>y "+y
+" " yank to system clipboard
+" nnoremap <leader>y "+y
+" " paste from system clipboard
+" nmap <leader>p "+p
 
-" paste from system clipboard
-nmap <leader>p "+p
+" " Neat X clipboard integration
+" " ,p will paste clipboard into buffer
+" " ,c will copy entire buffer into clipboard
+" noremap <leader>p :read !xsel --clipboard --output<cr>
+" noremap <leader>c :w !xsel -ib<cr><cr>
+
 
 " make Y behave like C or D
 nmap Y y$
@@ -195,10 +249,21 @@ map j gj
 map k gk
 
 " easier way to move between splits
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+" inoremap <C-h> <C-\><C-N><C-w>h
+" inoremap <C-j> <C-\><C-N><C-w>j
+" inoremap <C-k> <C-\><C-N><C-w>k
+" inoremap <C-l> <C-\><C-N><C-w>l
+
+" and in teminal mode:
+tnoremap <C-h> <C-\><C-N><C-w>h
+tnoremap <C-j> <C-\><C-N><C-w>j
+tnoremap <C-k> <C-\><C-N><C-w>k
+tnoremap <C-l> <C-\><C-N><C-w>l
+tnoremap <Esc> <C-\><C-n>
 
 " Blatantly stolen from https://github.com/tpope/vim-unimpaired/blob/master/plugin/unimpaired.vim
 

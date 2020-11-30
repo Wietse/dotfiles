@@ -6,6 +6,7 @@ filetype plugin on           " allow plugin feature by filetype
 filetype indent on           " allow indentation feature by filetype
 syntax enable                " enable syntax highlighting
 set nobackup                 " don't make a backup before writing a file
+set nowritebackup
 set noswapfile               " don't use a swapfile for the buffer
 set history=1000             " keep 1000 lines of history
 set encoding=utf-8           " default encoding
@@ -69,7 +70,10 @@ set textwidth=120              " when appropriate, break lines after a maximum w
 set nowrap                     " don't wrap long lines
 set list                       " enable list mode to show invisible characters
 set listchars=tab:»·,trail:·   " show these chars for <Tab> and for trailing whitespace
-set updatetime=100             " some plugins hook into the CursorHold event which gets triggered after updatetime ms
+set updatetime=300             " some plugins hook into the CursorHold event which gets triggered after updatetime ms
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
 
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"

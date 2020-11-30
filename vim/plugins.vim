@@ -8,27 +8,36 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugs')
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'morhetz/gruvbox'
 Plug 'cormacrelf/vim-colors-github'
-Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
-Plug 'junegunn/fzf.vim'
-" Plug 'scrooloose/nerdtree'
-" Plug 'Xuyuanp/nerdtree-git-plugin'
+
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-fugitive'
-Plug 'w0rp/ale'  " asynchronous linting
-Plug 'klen/python-mode'
-Plug 'jmcantrell/vim-virtualenv'
 Plug 'godlygeek/tabular'
 Plug 'christoomey/vim-tmux-navigator'
-" Plug 'Shougo/deoplete.nvim'  " asynchronous completion
-" Plug 'roxma/nvim-yarp'  " deoplete dependency
-" Plug 'roxma/vim-hug-neovim-rpc'  " deoplete dependency
-Plug 'ervandew/supertab'
-Plug 'Valloric/YouCompleteMe'
-" Plug 'davidhalter/jedi-vim'
-Plug 'mileszs/ack.vim'
+
+" Plug 'mileszs/ack.vim'
+
+Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+Plug 'junegunn/fzf.vim'
+
+" Code completion and linting
+" Plug 'ervandew/supertab'
+" Plug 'w0rp/ale'  " asynchronous linting
+" Plug 'Valloric/YouCompleteMe'
+" " Plug 'davidhalter/jedi-vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Python
+Plug 'klen/python-mode'
+Plug 'jmcantrell/vim-virtualenv'
+
 Plug 'rust-lang/rust.vim'
+Plug 'plasticboy/vim-markdown'
+Plug 'cespare/vim-toml'
+Plug 'stephpy/vim-yaml'
+
 call plug#end()
