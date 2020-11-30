@@ -13,6 +13,7 @@ fi
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
 
 # Using pyenv, see: https://github.com/pyenv/pyenv
 # See also at the end of this file

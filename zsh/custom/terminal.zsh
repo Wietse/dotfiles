@@ -5,11 +5,11 @@ alias mv='mv -iv'  # move: prompt to overwrite + verbose
 alias mkdir='mkdir -pv'  # make directory: intermediate dirs + verbose
 mcd() { mkdir "$1" && cd "$1"; }
 
-alias edit-vimrc='vim $HOME/.vim/vimrc'
-alias edit-zshrc='vim $HOME/.zshrc'
-alias edit-alias='vim $ZSH_CUSTOM/terminal.zsh'
-alias edit-tmuxrc='vim $HOME/.tmux.conf'
-alias edit-gitconfig='vim $HOME/dotfiles/git/config'
+alias edit-vimrc='nvim $HOME/.vim/vimrc'
+alias edit-zshrc='nvim $HOME/.zshrc'
+alias edit-alias='nvim $ZSH_CUSTOM/terminal.zsh'
+alias edit-tmuxrc='nvim $HOME/.tmux.conf'
+alias edit-gitconfig='nvim $HOME/dotfiles/git/config'
 
 # always getting annoyed with this one...
 alias ghostscript='/usr/bin/gs'
@@ -28,7 +28,7 @@ docker run -it \
 alias clear-dns-cache='sudo /etc/init.d/dns-clean start'
 
 # open vim in the notes directory
-alias notes='vim ~/Documents/notes'
+alias notes='nvim ~/Documents/notes'
 
 # show info on hard disks and partitions
 alias disk-info='inxi -pod'

@@ -39,40 +39,6 @@ let g:github_colors_block_diffmark = 0
 "   colorscheme github
 " endif
 
-" " NERDTree
-" let NERDTreeIgnore = ['\.pyc$', '\.swp$']
-" let NERDTreeQuitOnOpen = 1
-" nnoremap <leader>e :NERDTreeToggle<cr>
-
-" " ALE (Asynchronous Lint Engine)
-" " https://github.com/w0rp/ale
-" " let g:ale_linters = { 'python': ['flake8', 'pylint', 'mypy'], 'c': ['gcc', 'cppcheck'], 'cpp': ['gcc', 'cppcheck']}
-" let g:ale_linters = { 'python': ['flake8', 'pylint'], 'c': ['gcc', 'cppcheck'], 'cpp': ['gcc', 'cppcheck'], 'rust': ['analyzer']}
-" let g:ale_sign_column_always = 1
-" let g:ale_sign_error = '✗›'
-" let g:ale_sign_warning = '‼›'
-" let g:ale_sign_info = '∆›'
-" let g:ale_sign_style_error = '≈›'
-" let g:ale_sign_style_warning = '≈›'
-" let g:airline#extensions#ale#enabled = 1
-" let g:ale_open_list = 0  " 'on_save'
-" let g:ale_virtualenv_dir_names = ['venv', '.venv', '.py-env', '.py3-env', '.metis_env']
-" let g:ale_python_pylint_options = "--disable missing-docstring,line-too-long,invalid-name,too-many-arguments,too-many-instance-attributes,unnecessary-lambda,bad-whitespace,too-many-public-methods,too-few-public-methods,bad-continuation,too-many-locals"
-" " Annoying ALEExeption when viewing a diff with vim-fugitive
-" let g:ale_pattern_options = {'^fugitive:[\\/][\\/]': {'ale_enabled': 0}}
-" nmap <silent> ]e <Plug>(ale_next_wrap)
-" nmap <silent> [e <Plug>(ale_previous_wrap)
-" " For GCC
-" let g:ale_c_parse_compile_commands = 1
-" let g:ale_c_gcc_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
-" let g:ale_cpp_gcc_options = '-std=c++14 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
-" let g:ale_c_clang_options = '-std=c11 -Wall -I$HOME/.pyenv/versions/3.7.4/include/python3.7m'
-" " let g:ale_c_gcc_options = '-std=c11 `python-config --cflags`'
-" " let g:ale_cpp_gcc_options = '-std=c++14 `python-config --cflags`'
-" " let g:ale_c_clang_options = '-std=c11 `python-config --cflags`'
-" let g:ale_c_clangd_executable = 'clangd'
-" let g:ale_c_clangd_options = ''
-" let g:ale_set_highlights = 0
 
 " pymode plugin
 " let g:pymode_python = 'python3'
@@ -101,51 +67,9 @@ nmap <leader>rr Ofrom pudb.remote import set_trace; set_trace(term_size=(160, 48
 " Tabular
 vmap <leader>t :Tabularize /
 
-" " Deoplete
-" let g:deoplete#enable_at_startup = 1
-" let g:deoplete#enable_smart_case = 1
-" " Use <tab> to complete words
-" inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
-" function! s:check_back_space() abort
-"     let col = col('.') - 1
-"     return !col || getline('.')[col - 1]  =~ '\s'
-" endfunction
-
-" " Jedi vim
-" " let g:jedi#force_py_version=3
-" let g:jedi#show_call_signatures=2
-" let g:jedi#auto_vim_configuration=0
-" nnoremap <silent> <buffer> <leader>d :call jedi#goto()
-" nnoremap <silent> <buffer> <K> :call jedi#show_documentation()
-" nnoremap <silent> <buffer> <leader>n :call jedi#usages()
-
-" " YouCompletMe
-" let g:ycm_filetype_blacklist = {
-"       \ 'markdown': 1,
-"       \ 'netrw': 1,
-"       \ 'text': 1,
-"       \}
-" let g:ycm_language_server =
-" \ [
-" \   {
-" \     'name': 'rust',
-" \     'cmdline': ['rust-analyzer'],
-" \     'filetypes': ['rust'],
-" \     'project_root_files': ['Cargo.toml']
-" \   }
-" \ ]
-" " YCM's identifier completer will seed its identifier database with the keywords of the programming language you're writing
-" let g:ycm_seed_identifiers_with_syntax = 1
-" let g:ycm_add_preview_to_completeopt = 0
-" let g:ycm_use_clangd = 0
-" let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
-" let g:ycm_enable_diagnostic_highlighting=0
-" let g:ycm_auto_hover = ''
-" nnoremap <leader>d :YcmCompleter GoTo<cr>
-" nnoremap <leader>n :YcmCompleter GoToReferences<cr>
-" nnoremap <leader>h :YcmCompleter GetDoc<cr>
 
 " coc.nvim
+let g:coc_global_extensions = ['coc-json', 'coc-python', 'coc-sh', 'coc-rust-analyzer', 'coc-clangd', 'coc-yaml', 'coc-groovy', 'coc-toml', 'coc-docker']
 nmap <silent> <leader>d <Plug>(coc-definition)
 nmap <silent> <leader>y <Plug>(coc-type-definition)
 nmap <silent> <leader>m <Plug>(coc-implementation)
