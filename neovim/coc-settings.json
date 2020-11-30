@@ -1,0 +1,7 @@
+{
+    "python.venvFolders": [".venv"],
+    "python.jediEnabled": false,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": ["--load-plugins", "pylint_django"],
+    "rust-analyzer.serverPath": "/home/wja/.local/bin/rust-analyzer"
+}
