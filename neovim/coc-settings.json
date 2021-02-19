@@ -3,5 +3,7 @@
     "python.jediEnabled": false,
     "python.linting.pylintEnabled": true,
     "python.linting.pylintArgs": ["--load-plugins", "pylint_django"],
-    "rust-analyzer.serverPath": "/home/wja/.local/bin/rust-analyzer"
+    "rust-analyzer.serverPath": "/home/wja/.local/bin/rust-analyzer",
+    "rust-analyzer.cargo.loadOutDirsFromCheck": true,
+    "rust-analyzer.procMacro.enable": true
 }
