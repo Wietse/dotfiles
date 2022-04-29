@@ -2,39 +2,43 @@
     email = wietse.j@gmail.com
     name = Wietse
     # signingkey = 93E459761ECC6E25
-    signingkey = BB273865A110319F
 
 [core]
-    editor = vim
-    excludesfile = ~/dotfiles/git/gitignore_global 
+    editor = nvim
+    excludesfile = ~/projects/dotfiles/git/gitignore_global 
 
 [commit]
     verbose = true
-    gpgsign = true
+    # gpgsign = true
 
 [fetch]
 	prune = true
 
+[pull]
+rebase = true
+ff = only
+
 [push]
     default = simple
-
-[rebase]
-    autosquash = true
 
 [diff]
     tool = vimdiff
     submodule = log
 
 [difftool "vimdiff"]
-    cmd = vim -d $LOCAL $BASE
+    cmd = nvim -d \"$LOCAL\" \"$BASE\"
 
 [mergetool "fugitive"]
-    cmd = vim -f -c \"Gdiff\" \"$MERGED\"
+    cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+
+[merge]
+conflictStyle = diff3
+tool = fugitive
 
 [alias]
     co = checkout
     ci = commit
-    br = branch --color
+    br = branch --color -vvv
     st = status
     l = log --oneline --decorate --graph --all
     lh = log --oneline --decorate --no-merges --graph --all
@@ -43,11 +47,11 @@
     sa = stash save --include-untracked --keep-index
 
     # get the current branch name (used in other aliases)
-    branch-name = "!git rev-parse --abbrev-ref HEAD"
+    # branch-name = "!git rev-parse --abbrev-ref HEAD"
     # push current branch to the remote "origin" and set it to track the upstream branch
-    push-new-branch = "!git push -u origin $(git branch-name)"
+    # push-new-branch = "!git push -u origin $(git branch-name)"
     # Delete the remote version of the current branch
-    delete-remote-branch = "!git push origin :$(git branch-name)"
+    # delete-remote-branch = "!git push origin :$(git branch-name)"
     ## Interactively rebase all the commits on the current branch
     # rebase-branch = "!git rebase -i `git merge-base master HEAD`"
 [gpg]
@@ -56,7 +60,3 @@
     branch = false
     tag = false
     stash = false
-[merge]
-	conflictStyle = diff3
-[pull]
-	ff = only
