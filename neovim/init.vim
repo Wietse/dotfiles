@@ -24,19 +24,6 @@ endif
 set undodir=~/.cache/nvim/undo
 
 
-" plugins
-" see 'lua/plugins.lua'
-packadd packer.nvim
-lua << EOF
-  require('plugins')
-  require('lsp_config')
-  require('cmp_config')
-  require('treesitter_config')
-  require('telescope_config')
-
-EOF
-
-
 "
 "--- USER INTERFACE
 "
@@ -74,7 +61,7 @@ set splitbelow                 " vertical split below the current screen
 set splitright                 " horizontal splits to the right
 set switchbuf+=useopen         " switch to the first window where the specified buffer is open
 set diffopt+=vertical          " prefer vertical splits for diffs
-set diffopt+=context:100       " show a lot of context around the changed lines
+set diffopt+=context:25       " show a lot of context around the changed lines
 set autoindent                 " keep indentation of previous line when pressing <Enter>
 set smartindent                " be smarter about autoindent
 set shiftwidth=4               " shift by 4 spaces when shifting lines with >> or <<
@@ -88,6 +75,11 @@ set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkon100
 "
 "--- PLUGINS
 "
+" packadd packer.nvim
+lua require('init')
+" lua require('plugins')
+
+
 " powerline + airline
 let g:airline_powerline_fonts=1
 

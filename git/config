@@ -1,6 +1,7 @@
 [user]
     email = wietse.j@gmail.com
     name = Wietse
+	signingkey = 42B6414832419955443DB545402955831194B81E
     # signingkey = 93E459761ECC6E25
 
 [core]
@@ -9,6 +10,7 @@
 
 [commit]
     verbose = true
+	gpgsign = true
     # gpgsign = true
 
 [fetch]
@@ -40,7 +42,9 @@ tool = fugitive
     ci = commit
     br = branch --color -vvv
     st = status
-    l = log --oneline --decorate --graph --all
+    # l = log --oneline --decorate --graph --all
+    # for the placeholders: https://git-scm.com/docs/pretty-formats
+    l = log --graph --abbrev-commit --decorate --format=format:'%C(yellow)%h%C(reset) %C(cyan)%as%C(reset) %C(green)%d%C(reset) %C(white)%s%C(reset) %C(dim white) %an%C(reset)' --all
     lh = log --oneline --decorate --no-merges --graph --all
     lb = log --cherry --boundary --color --oneline --decorate --graph
     pf = push origin +HEAD
@@ -55,7 +59,7 @@ tool = fugitive
     ## Interactively rebase all the commits on the current branch
     # rebase-branch = "!git rebase -i `git merge-base master HEAD`"
 [gpg]
-    program = gpg2
+	program = /opt/homebrew/bin/gpg
 [pager]
     branch = false
     tag = false

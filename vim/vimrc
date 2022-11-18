@@ -26,6 +26,7 @@ highlight! DiffDelete guifg=lightred ctermfg=lightred guibg=#32302f ctermbg=243 
 highlight! DiffAdd guifg=lightgreen ctermfg=lightgreen guibg=#32302f ctermbg=167 gui=inverse cterm=inverse
 highlight! DiffChange guifg=gray ctermfg=gray guibg=#1d2021 ctermbg=229 gui=inverse cterm=inverse
 highlight! DiffText guifg=lightblue ctermfg=136 guibg=#1d2021 ctermbg=229 gui=bold,inverse cterm=bold,inverse
+" colorscheme default
 
 " diff colorscheme: vim-colors-github
 " set background=light
