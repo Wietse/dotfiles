@@ -23,6 +23,9 @@ ff = only
 [push]
     default = simple
 
+[rebase]
+    autosquash = true
+
 [diff]
     tool = vimdiff
     submodule = log
