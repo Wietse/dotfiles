@@ -1,5 +1,5 @@
 [flake8]
-max-line-length = 120
+max-line-length = 160
 /* ignore = E501,E126,E731 */
 select = F,E10,E11,E502,E71,E72,E9,W1,W2,W6
-max-complexity = 15
+max-complexity = 60

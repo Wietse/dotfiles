@@ -99,6 +99,14 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 set completeopt=menuone,noinsert,noselect
 
 
+" " ChatGPT
+" " https://github.com/jackMort/ChatGPT.nvim
+" nnoremap <leader>tk :ChatGPT<cr>
+" nnoremap <leader>tj :ChatGPTActAs<cr>
+" nnoremap <leader>tt :ChatGPTEditWithInstructions<cr>
+" nnoremap <leader>tr :ChatGPTEditWithInstructions<cr>
+
+
 "
 "-- KEY MAPPINGS
 "
