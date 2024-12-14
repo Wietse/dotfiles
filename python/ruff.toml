@@ -1,0 +1,31 @@
+line-length = 79
+exclude = [
+    "*cookiecutter*",
+]
+
+# [lint]
+# # Enable all `pydocstyle` rules, limiting to those that adhere to the
+# # Google convention via `convention = "google"`, below.
+# select = ["D"]
+# # On top of the Google convention, disable `D417`, which requires
+# # documentation for every function parameter.
+# ignore = ["D100", "D101", "D102", "D103", "D107", "D417"]
+# extend-select = ["PIE790", "I001"]
+#
+# [lint.pydocstyle]
+# # Use Google-style docstrings.
+# convention = "google"
+#
+# [lint.isort]
+# combine-as-imports = true
+# split-on-trailing-comma = false
+
+extend-select = ["PIE790", "I001"]
+
+[pydocstyle]
+# Use Google-style docstrings.
+convention = "google"
+
+[isort]
+combine-as-imports = true
+split-on-trailing-comma = false

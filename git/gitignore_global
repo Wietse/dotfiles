@@ -1,6 +1,6 @@
 wja_*
 .venv-dbg
-.venv
+.venv*
 .mypy_cache
 compile_commands.json
 __pycache__

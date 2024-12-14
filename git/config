@@ -1,24 +1,28 @@
 [user]
-    email = wietse.j@gmail.com
+    email = wietse.jacobs@robovision.eu
     name = Wietse
-	signingkey = 42B6414832419955443DB545402955831194B81E
+	signingkey = D8234AD774A5D6F1
+    # email = wietse.j@gmail.com
+    # name = Wietse
+	# signingkey = 42B6414832419955443DB545402955831194B81E
     # signingkey = 93E459761ECC6E25
 
 [core]
+    # sshCommand = "ssh -i ~/.ssh/id_ed25519"
+    sshCommand = "ssh -i ~/.ssh/id_robovision"
     editor = nvim
-    excludesfile = ~/projects/dotfiles/git/gitignore_global 
+    excludesfile = ~/projects/dotfiles/git/gitignore_global
 
 [commit]
     verbose = true
 	gpgsign = true
-    # gpgsign = true
 
 [fetch]
 	prune = true
 
 [pull]
-rebase = true
-ff = only
+    rebase = true
+    ff = only
 
 [push]
     default = simple
@@ -31,14 +35,14 @@ ff = only
     submodule = log
 
 [difftool "vimdiff"]
-    cmd = nvim -d \"$LOCAL\" \"$BASE\"
+    cmd = nvim -d \"$BASE\" \"$LOCAL\"
 
 [mergetool "fugitive"]
     cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
 
 [merge]
-conflictStyle = diff3
-tool = fugitive
+    conflictStyle = diff3
+    tool = fugitive
 
 [alias]
     co = checkout
@@ -49,7 +53,8 @@ tool = fugitive
     # for the placeholders: https://git-scm.com/docs/pretty-formats
     l = log --graph --abbrev-commit --decorate --format=format:'%C(yellow)%h%C(reset) %C(cyan)%as%C(reset) %C(green)%d%C(reset) %C(white)%s%C(reset) %C(dim white) %an%C(reset)' --all
     lh = log --oneline --decorate --no-merges --graph --all
-    lb = log --cherry --boundary --color --oneline --decorate --graph
+    lb = cherry --abbrev -v master HEAD
+    lbr = cherry --abbrev -v master release-5.8.0
     pf = push origin +HEAD
     sa = stash save --include-untracked --keep-index
 
@@ -62,8 +67,17 @@ tool = fugitive
     ## Interactively rebase all the commits on the current branch
     # rebase-branch = "!git rebase -i `git merge-base master HEAD`"
 [gpg]
-	program = /opt/homebrew/bin/gpg
+	# program = /opt/homebrew/bin/gpg
 [pager]
     branch = false
     tag = false
     stash = false
+
+# github user - brooder-paladin
+[includeIf "gitdir:~/projects/brooder/"]
+    path = ~/projects/brooder/.gitconfig
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

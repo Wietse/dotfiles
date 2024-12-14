@@ -1,4 +1,5 @@
 [pycodestyle]
 count = False
-# ignore = E226,E302,E71
+ignore = E731,E226
 max-line-length = 160
+max-complexity = 60
